@@ -20,6 +20,7 @@
 
 # python
 import exceptions, os
+import time
 
 # wxpython
 import wx
@@ -56,7 +57,7 @@ def showError(parent, message, titre) :
 ###############################################################################
 ###############################################################################
 ###############################################################################
-###############################################################################	
+###############################################################################
 class DialogConfig(wx.Dialog) :
 	def __init__(self, parent, title) :
 		wx.Dialog.__init__(self, parent, -1, title)
@@ -105,6 +106,62 @@ class DialogConfig(wx.Dialog) :
 	def getFtpPwd(self) :
 		return self.inputFtpPwd.GetValue()
 		
+class DialogUpload(wx.Dialog) :
+	def __init__(self, parent, title, project) :
+		wx.Dialog.__init__(self, parent, -1, title, style=wx.CAPTION )
+		
+		self.project = project
+		self.SetSize((450, 270))
+		
+		# sizer
+		topSizer = wx.FlexGridSizer(cols=1)
+		bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
+		
+		# text ctrl
+		self.tcOutput = wx.TextCtrl(self, -1, '', style=wx.TE_MULTILINE|wx.TE_READONLY)
+		
+		# button
+		btOk = wx.Button(self, -1, "Ok")
+		btCancel = wx.Button(self, -1, "Cancel")
+		
+		# event
+		self.Bind(EVT_UPLOAD_STAT, self.OnUploadMsg)
+		self.Bind(wx.EVT_BUTTON, self.OnCancel, btCancel)
+		self.Bind(wx.EVT_BUTTON, self.OnCancel, btOk)
+		
+		# sizer
+		bottomSizer.Add(btCancel, 0, wx.ALL, 5)
+		bottomSizer.Add(btOk, 0, wx.ALL, 5)
+		
+		topSizer.Add(self.tcOutput, 1, wx.ALL|wx.EXPAND, 5)
+		topSizer.AddGrowableRow(0,1)
+		topSizer.AddGrowableCol(0,1)
+		topSizer.Add(bottomSizer, 0, wx.ALIGN_CENTER|wx.ALL, 5)
+		
+		self.SetSizer(topSizer)
+		
+		self.tcOutput.AppendText("Upload files ...\n")
+		self.run()
+		
+	def run(self) :
+		self.uploader = Uploader(self, self.project)
+		self.uploader.start()
+		
+	def stop(self) :
+		#~ self.uploader.close()
+		pass
+		
+	def OnCancel(self, event) :
+		self.EndModal(wx.ID_OK)
+		
+	def OnUploadMsg(self, event) :
+		if event.status == self.uploader.UPLOAD_START :
+			self.tcOutput.AppendText("-> Upload '%s' " % (event.file))
+		elif event.status == self.uploader.UPLOAD_FINISH :
+			self.tcOutput.AppendText(" [OK]\n")
+		elif event.status == self.uploader.UPLOAD_ALL_FINISH :
+			self.tcOutput.AppendText("Upload finish !\n")
+			
 class MainFrame(wx.Frame) :
 	# id
 	IDMENU_NEWPROJ = wx.NewId()
@@ -263,6 +320,9 @@ class MainFrame(wx.Frame) :
 		
 		dlg.Destroy()
 		
+		# on sauvegarde le projet
+		self.project.saveProject()
+		
 	def OnOpenProject(self, event) :
 		# où est le fichier ?
 		dlg = wx.FileDialog(self, message="Ouvrir le projet ... ",
@@ -288,7 +348,14 @@ class MainFrame(wx.Frame) :
 		pass
 		
 	def OnUpProject(self, event) :
-		self.project.upload()
+		dlg = DialogUpload(self, "Upload ...", self.project)
+		
+		dlg.ShowModal()
+		dlg.stop()
+		dlg.Destroy()
+		
+		# on sauvegarde les changements (modtimestamp)
+		self.project.saveProject()
 		
 	def OnTreeRightClick(self, event) :
 		pass
