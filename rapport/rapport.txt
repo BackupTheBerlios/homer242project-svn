@@ -105,7 +105,7 @@ M. mâïzi a schématisée cette approche dans un premier temps comme suit :
 
 ********************** ICI LES INCONVÉNIENTS *******************************************************
 
-j'ai proposé l'alternative suivante : 
+proposition de l'alternative suivante : 
 **************************** ICI LE NOUVEAU UML *********************************************
 
 cette alternative résout certains inconvénients mais on réfléchissant un peu plus, nous nous sommes rendu compte que le schéma a un inconvénient :
@@ -120,7 +120,8 @@ Première brique :
 pour chaque table visité on veut présenter au visiteur les différents tuples de la table ainsi que les opérations que le visiteur peut effectuer sur chacun des tuples
 
 5. adbapi le retour :
-    une fois l'implémentation des roles efféctuées nous avons continuer le développement d'adbapi :
+    une fois la première proposition des roles mise en place, nous avons continuer le développement 
+d'adbapi :
     * implémentation de l'algébre :
     
     * implémentation des schémas :
@@ -192,5 +193,32 @@ un module AdbapiOracle qui au même titre que AdbapiPg va se charger de construir
 "TABLESPACES" comme étant des entités physiques et non logique de stockage, les éspaces de nommage sont le nom du 
 propriétaire "OWNER" ou l'identifiant de l'utilisateur qui se connecte "USER". les vues quant à elles forment des 
 objets à part entière car elles ne sont attachées à aucun "TABLESPACE" mais plutôt au propriétaire "OWNER".
-	
-ICI METRRE CE QUE J'AI ECRIS dans trac de appliWeb sur les ROle
+
+6. Les Droits :
+les droits qu'un acteur a sur une donnée sont stockées aux niveau de la base de donnée. Certes c'est une solution mais 
+elle montre des défauts :
+    * on ne peut pas donner des droits sur un ensemble d'attributs mais plutôt sur tout les attributs d'une donnée 
+(tuple) .
+    * de plus il est difficile de mettre en place un systeme qui permet de définir en cascade les droits sur plusieurs 
+données, ex. : un résponsable de spécialité doit avoir le droit d'effectuer certaines opérations sur sa spécialité et 
+de consulter les candidatures pour les approuver; Donc changer l'état d'une candidaure donc éditer une candidature.
+Tous ceci parsequ'il a le rôle de résponsable de spécialité.
+Le modèle actuel ne permet pas de répondre à ces problèmes ce qui nous obligent à jeter tous ce que nous avons fait 
+jusqu'à présent (principe de l'eXtrem Programming oblige) et de faire une autre proposition.
+
+6.1. Les patrons s'en chargent !
+L'idée est la suivante : laisser aux patrons le soin de définir les informations dont ils ont besoin. Ainsi, pour 
+chaque donnée il y'aura un ou plusieurs patrons associés. Chacun des patrons n'affichera que les champs succeptibles
+d'être consulter ou bien modifier par un acteur selon ses droits.
+
+6.2. Rôles en cascade
+Le but est d'associer à un rôles principale un ou plusieurs autres rôles dis annexes. Par conséquent un acteur 
+ayant un rôle principale sur une donnée se voit attribuer des rôles annexes. Mais il ne faut pas oublier de spécifier 
+que le rôle annexe (dans notre cas : le résponsable de condidatures) est posé sur tous les tuples d'une même 
+table (la table contenant les candidatures à la spécialité). Donc un role annexe doit avoir un attribut qui spécifie 
+la table sur laquelle s'applique ce role.
+
+**********METTRE ICI LE SCHEMA UML**************
+
+
+
