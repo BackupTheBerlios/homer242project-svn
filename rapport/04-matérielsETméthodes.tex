@@ -1,0 +1,76 @@
+matériel et méthodes
+    matériel
+    le matériel utilisé pour le développement est un PC DELL GX150 :
+        - processeur : intel celeron 800Mhz
+        - mémoire : 324 Mo
+        - connexion réseau intranet 
+        - connexion internet
+
+    logiciels
+        - système d'exploitation : Linux Fedora Core 4
+        - langage de programmation : Python 2.4
+        - subversion
+        - trac 0.8
+        - SGBDR : Postgresql 7.4
+        - serveur http : Apache 2
+        - moteur de template ClearSilver
+
+    méthodes
+     	- eXtrem Programming
+        - travail collaboratif ( subversion et trac )
+        - programmation par objet ( python )
+        - Web et cgi
+
+
+- subversion
+Subversion est un systéme de contrôle de version qui tend à remplacer le vieux CVS dans la communauté de l'open source.
+Plusieurs caractéristiques de subversion permettent de faciliter le travail collaboratif. Parmi celles-ci on peut citer le dépot 
+centralisé pour les fichiers d'un projet, la possibilité de travailler de façon conccurente sur les fichiers d'un dépôt donné.
+exemple d'utilisation :
+             ***************METTRE ICI LE SCHEMA : gcl-conflit.png*****************
+
+   1. dans le premier cas, Boule et Bill effectuent des changements sur le même fichier, mais dans des portions distinctes (en jaune). 
+Lorsque Bill effectue un commit, Subversion lui signale qu'il n'est pas à jour et lui refuse l'opération. 
+Bill effectue alors un update qui fusionne les changements de Boule avec les siens. Bill peut alors effectuer son commit.
+   2. dans le second cas, Boule et Bill modifient la même ligne du même fichier (toujours en jaune). 
+Boule effectue un commit sans soucis mais Bill se voit signaler un conflit par Subversion lorsqu'il tente de faire le sien. 
+Subversion modifie alors son fichier local pour lui donner les deux versions de la ligne (celle du dépôt et la sienne) 
+afin qu'il résolve le conflit manuellement (en rouge). 
+Une fois la résolution faite, Bill peut effectuer sont commit.
+
+
+- trac
+
+Trac est un logiciel écrit en python qui integre plusieurs outils pour le développement de projet collaboratif. Il est composé d'un wiki, d'un système de tickets et d'une interface pour subversion.
+Un wiki est un site web dynamique qui permet d'organiser rapidement des informations. Chaque développeur qui possède un compte sur trac peut editer des pages directement dans la naviguateur.
+
+- Extreme programming
+
+ L'Extreme Programming (XP) est une méthode agile de gestion de projet informatique, dont l'objectif est de permettre de gérer des projets de manière simple et efficace. Cette méthode a été inventée par Kent Beck et Ward Cunningham.
+
+- Python
+
+Python est un langage de programmation interprété, multi-paradigme, ce qui signifie qu'il autorise la programmation impérative structurée, orientée objet, et fonctionnelle. Il est doté d'un typage dynamique (ce qui ne l'empêche pas de disposer d'un typage fort), d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions.
+Il permet entre autre de développer des applications web.
+
+- ClearSilver
+
+ClearSilver est un système de patron (en anglais: template) rapide, performent et independant de tout autre language. 
+Il permet de séparer le fond (le contenu informationnel) de la forme (la manière dont il est présenté).
+Dans un 1er temps, on crée la template puis on remplis les cases par des informations extraites d'une base de donnée.
+-- SCHEMA §§§§§§- ----
+ClearSilver est particulièrement intéressant car il fournit un module pour python.
+
+CRITIQUES :
+  Python : 
+  1- les variables et es méthodes privées d'une instance de classe restent accessibles depuis l'extérieur, 
+  class MaClasse : 
+     def __init__( self ) :
+         self.__var = ``hello world''
+
+  m =  MaClasse()
+  print m.__var
+  >> hello world
+
+  2- le polymorphisme n'est pas implémenté ce qui limite l'application des mécanisme de la P.P.O
+
