@@ -95,9 +95,9 @@ Pour combler ce vide, M. Maïzi a réécrit la classe adbapiField en lui ajoutant l
 Le principe est d'utiliser une algèbre qui permet de spécifier les contraintes sur les attributs. exemple :
 
 
-4. briques de bases
+4. Systeme d'information
 le service informatique de l'UFR propose souvent de nouveaux services au core enseignant ainsi qu'aux étudiants; 
-Ceci implique la création de nouvelles applications ( Web entre autre ). Une application Web est couplée, dans la plupart du temps, à une base de données. 
+Ceci implique la création de nouvelles applications (Web entre autre). Une application Web est couplée, dans la plupart du temps, à une base de données. 
 Afin de donner plus de liberté aux enseignants dans la manipulation des données qui les intéressent, Une approche a vu le jour : on peut considérer un system d'information comme étant un ensemble de donnée sur lesquelles des acteurs ont des droits selon leur(s) rôle(s). cette approche étant générique on peut l'appliquer donc sur n'importe quelles données.
 
 M. mâïzi a schématisée cette approche dans un premier temps comme suit : 
@@ -107,10 +107,6 @@ M. mâïzi a schématisée cette approche dans un premier temps comme suit :
 
 proposition de l'alternative suivante : 
 **************************** ICI LE NOUVEAU UML *********************************************
-
-cette alternative résout certains inconvénients mais on réfléchissant un peu plus, nous nous sommes rendu compte que le schéma a un inconvénient :
-    - Le cas de l'interface pour l'administrateur qui veut donner un rôle à une personne par rapport à une donnée. S'il fait pas attention ( et c'est là le pari ) il peut attribuer des rôles qui ne correspondent pas aux données en question, d'où la nouvelle tentative suivante :
-******************************** ICI LE DERNIER DIAGRAMME UML ***********************************************
 
 L'héritage : pas tout a fait ça
 Le principe de l'héritage dans postgresql n'est pas tout a fait au point ( cf. doc postgresql ). M. Maïzi a mis au point un moyen utilisant les triggers qui permet une utilisation plus sûre du mécanisme.
@@ -207,9 +203,8 @@ Le modèle actuel ne permet pas de répondre à ces problèmes ce qui nous obligent 
 jusqu'à présent (principe de l'eXtrem Programming oblige) et de faire une autre proposition.
 
 6.1. Les patrons s'en chargent !
-L'idée est la suivante : laisser aux patrons le soin de définir les informations dont ils ont besoin. Ainsi, pour 
-chaque donnée il y'aura un ou plusieurs patrons associés. Chacun des patrons n'affichera que les champs succeptibles
-d'être consulter ou bien modifier par un acteur selon ses droits.
+L'idée est la suivante : lors de la présentation d'une donnée à un acteur du système d'information, on utilisera un patron qui n'affiche que les champs 
+susceptibles d'être consulter ou modifier et ceci selon les droits que l'acteur a par rapport à la donnée.
 
 6.2. Rôles en cascade
 Le but est d'associer à un rôles principale un ou plusieurs autres rôles dis annexes. Par conséquent un acteur 
@@ -220,5 +215,4 @@ la table sur laquelle s'applique ce role.
 
 **********METTRE ICI LE SCHEMA UML**************
 
-
-
+6.3 
