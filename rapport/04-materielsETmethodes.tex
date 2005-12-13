@@ -1,9 +1,8 @@
 matériel et méthodes
     matériel
-    le matériel utilisé pour le développement est un PC DELL GX150 :
+    le matériel utilisé pour le développement est un PC DELL GX150 pour deux développeurs :
         - processeur : intel celeron 800Mhz
         - mémoire : 324 Mo
-        - connexion réseau intranet 
         - connexion internet
 
     logiciels
@@ -11,7 +10,7 @@ matériel et méthodes
         - langage de programmation : Python 2.4
         - subversion
         - trac 0.8
-        - SGBDR : Postgresql 7.4
+        - SGBDR : Postgresql 7.4, Oracle 8
         - serveur http : Apache 2
         - moteur de template ClearSilver
 
@@ -19,7 +18,7 @@ matériel et méthodes
      	- eXtrem Programming
         - travail collaboratif ( subversion et trac )
         - programmation par objet ( python )
-        - Web et cgi
+        - web et cgi
 
 
 - subversion
@@ -44,33 +43,38 @@ Une fois la résolution faite, Bill peut effectuer sont commit.
 Trac est un logiciel écrit en python qui integre plusieurs outils pour le développement de projet collaboratif. Il est composé d'un wiki, d'un système de tickets et d'une interface pour subversion.
 Un wiki est un site web dynamique qui permet d'organiser rapidement des informations. Chaque développeur qui possède un compte sur trac peut editer des pages directement dans la naviguateur.
 
-- Extreme programming
-
- L'Extreme Programming (XP) est une méthode agile de gestion de projet informatique, dont l'objectif est de permettre de gérer des projets de manière simple et efficace. Cette méthode a été inventée par Kent Beck et Ward Cunningham.
+- eXtreme programming
+ L'eXtreme programming (XP) est une méthode agile de gestion de projet informatique, dont l'objectif est de permettre de gérer des projets de manière simple et efficace. Cette méthode a été inventée par Kent Beck et Ward Cunningham.
+un de ses principes : le travail en binômes, être prêt à jeter le travail fait à n'importe quel moments deu développement,~etc.
 
 - Python
-
-Python est un langage de programmation interprété, multi-paradigme, ce qui signifie qu'il autorise la programmation impérative structurée, orientée objet, et fonctionnelle. Il est doté d'un typage dynamique (ce qui ne l'empêche pas de disposer d'un typage fort), d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions.
-Il permet entre autre de développer des applications web.
+Python est un langage de programmation interprété, multi-paradigme, ce qui signifie qu'il autorise la programmation impérative structurée, orientée objet, et fonctionnelle. Il est doté d'un typage dynamique (ce qui ne l'empêche pas de disposer d'un typage fort), d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions. 
+Il permet aussi de développer des applications web.
 
 - ClearSilver
-
 ClearSilver est un système de patron (en anglais: template) rapide, performent et independant de tout autre language. 
-Il permet de séparer le fond (le contenu informationnel) de la forme (la manière dont il est présenté).
-Dans un 1er temps, on crée la template puis on remplis les cases par des informations extraites d'une base de donnée.
+Le système de patron est utilisée dans le modèle \bsc{mvc} permet de séparer le fond (ce qu'on veut présenter) de la forme (la manière dont on présente).
+Dans un 1\up{èr} temps, on crée la template puis on remplis les cases par des informations extraites d'une base de donnée.
 -- SCHEMA §§§§§§- ----
 ClearSilver est particulièrement intéressant car il fournit un module pour python.
 
+- Modèle Vue Contrôleur
+L'architecture Modèle Vue Contrôleur \dsc{mvc} est un motif de conception pour le développement d'applications logicielles qui sépare le modèle de données, l'interface utilisateur et la logique de contrôle.
+Ce modèle d'architecture impose la séparation entre les données, les traitements et la présentation, ce qui donne trois parties fondamentales dans l'application finale : le modèle, la vue et le contrôleur.
+
+
 CRITIQUES :
-  Python : 
-  1- les variables et es méthodes privées d'une instance de classe restent accessibles depuis l'extérieur, 
+  L'utilisation de Python facilite le travail mais certaines contraintes~: 
+  \item Les variables et les méthodes privées d'une instance de classe restent accessibles depuis l'extérieur.
+  
   class MaClasse : 
      def __init__( self ) :
          self.__var = ``hello world''
 
   m =  MaClasse()
   print m.__var
-  >> hello world
+  >>> hello world
 
-  2- le polymorphisme n'est pas implémenté ce qui limite l'application des mécanisme de la P.P.O
-
+  \item Le polymorphisme n'est pas implémnté ce qui limite l'application de ce mécanisme dans notre développement.
+  \item ClearSilver est peu utilisé et la documentation est peu abondante.
+  \item la méthode d'eXtreme programming est parfois source de conflits minimes dans les points de vue, elle est aussi 

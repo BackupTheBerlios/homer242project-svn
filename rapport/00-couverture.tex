@@ -1,26 +1,55 @@
-\documentclass[a4paper,11pt]{article}
+\documentclass[a4paper,11pt]{report}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
+\usepackage{syntonly,fancyhdr,setspace,vmargin}
+%\syntaxonly
 
+
+\title{Ministère de l'Education National \vfill UNIVERSITE MONTPELLIER II \\ UFR \\
+IUP \\ GENIE MATHEMATIQUE ET INFORMATIQUE \\ 2005 / 2006 \vfill RAPPORT DE STAGE \vfill effectué à \\
+L'université de Montpellier~II - Département~informatique \\
+du 1\up{èr}~septembre au 30~décembre \\ par~: \\ 2A \\ Directeur de stage : M.~Joël MAIZI
+\\ Résponsable univérsitaire~: M.~Pierre pompidor
+\fbox
+        {
+          \begin{minipage}{0.6\textwidth}
+            TITRE DE LA MEMOIRE
+          \end{minipage}
+        }
+}
+
+%pour enlever la date de la page de couverture
+\date{}
+\setpapersize{A4}
+\setmarginsrb{60pt}{20pt}{50pt}{0pt}{0pt}{0pt}{0pt}{0pt}
+%  \geometry{hmargin=50pt, vmargin=0pt}
 \begin{document}
-
-\begin{titlepage}
-\title{Ministère de l'Education National \\ UNIVERSITE MONTPELLIER II \\ UFR \\
-IUP \\ GENIE MATHEMATIQUE ET INFORMATIQUE \\ 2005 / 2006 \\ RAPPORT DE STAGE
-\\ effectué à \\
-L'unversité de Montpellier II - Département informatique \\
-du 1èr septembre au 30 décembre \\ par \\ 2A \\ Directeur de stage : M Joël MAIZI 
-\\ Pierre POMPIDOR \\ TITRE DE LA MEMOIRE}
-\end{titlepage}
-\maketitle
-
-\newpage
-
-\tableofcontents
-\section{Déebut}
-iiii
-\section{Suite et fin}
-On verra plus tard.
+  \maketitle
+  \doublespacing
+   \tableofcontents
+   
+    \pagestyle{fancy}
+    \lhead{Le sujet}
+    \rhead{\leftmark}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.4pt}  	
+    
+    \input{03-introduction}
+    \chapter{Début}    
+        \section{coucou}
+        lkqdfv qmodhoqisd oisqhf oqshdfois \textsc{fqshf}
+        \begin{itemize}
+            \item coucou~;
+            \item alors.
+        \end{itemize}
+        \newpage
+        cououcoucou
+    \chapter{deux}
+        \section{coucou}
+        lkqdfv qmodhoqisd oisqhf oqshdfois fqshf
+    
+        \section{Suite et fin}
+        on verra plus tard.
 
 \end{document}
