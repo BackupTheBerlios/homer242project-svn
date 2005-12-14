@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt]{report}
+\documentclass[a4paper,12pt]{report}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -9,8 +9,8 @@
 \title{Ministère de l'Education National \vfill UNIVERSITE MONTPELLIER II \\ UFR \\
 IUP \\ GENIE MATHEMATIQUE ET INFORMATIQUE \\ 2005 / 2006 \vfill RAPPORT DE STAGE \vfill effectué à \\
 L'université de Montpellier~II - Département~informatique \\
-du 1\up{èr}~septembre au 30~décembre \\ par~: \\ 2A \\ Directeur de stage : M.~Joël MAIZI
-\\ Résponsable univérsitaire~: M.~Pierre pompidor
+du 1\up{èr}~septembre au 30~décembre \\ par~: \\ 2A \\ Directeur de stage : M.~Joël Maizi
+\\ Résponsable univérsitaire~: M.~Pierre Pompidor
 \fbox
         {
           \begin{minipage}{0.6\textwidth}
@@ -21,35 +21,30 @@ du 1\up{èr}~septembre au 30~décembre \\ par~: \\ 2A \\ Directeur de stage : M.~J
 
 %pour enlever la date de la page de couverture
 \date{}
-\setpapersize{A4}
-\setmarginsrb{60pt}{20pt}{50pt}{0pt}{0pt}{0pt}{0pt}{0pt}
-%  \geometry{hmargin=50pt, vmargin=0pt}
+%\setpapersize{A4}
+\setmarginsrb{3.5cm}{1.5cm}{2.5cm}{1.5cm}{1cm}{1cm}{1cm}{1cm}
+%1 est la marge gauche
+%2 est la marge en haut
+%3 est la marge droite
+%4 est la marge en bas
+%5 fixe la hauteur de l'entête
+%6 fixe la distance entre l'entête et le texte
+%7 fixe la hauteur du pied de page
+%8 fixe la distance entre le texte et le pied de page
+
 \begin{document}
   \maketitle
-  \doublespacing
+  \onehalfspacing
    \tableofcontents
    
     \pagestyle{fancy}
-    \lhead{Le sujet}
+    \lhead{adbapi et les briques de bases}
     \rhead{\leftmark}
     \renewcommand{\headrulewidth}{0.4pt}
     \renewcommand{\footrulewidth}{0.4pt}  	
-    
+
+    \input{01-remerciements}    
     \input{03-introduction}
-    \chapter{Début}    
-        \section{coucou}
-        lkqdfv qmodhoqisd oisqhf oqshdfois \textsc{fqshf}
-        \begin{itemize}
-            \item coucou~;
-            \item alors.
-        \end{itemize}
-        \newpage
-        cououcoucou
-    \chapter{deux}
-        \section{coucou}
-        lkqdfv qmodhoqisd oisqhf oqshdfois fqshf
-    
-        \section{Suite et fin}
-        on verra plus tard.
+    \input{04-materielsETmethodes}
 
 \end{document}

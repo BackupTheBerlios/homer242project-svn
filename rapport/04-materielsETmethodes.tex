@@ -1,32 +1,47 @@
-matériel et méthodes
-    matériel
-    le matériel utilisé pour le développement est un PC DELL GX150 pour deux développeurs :
-        - processeur : intel celeron 800Mhz
-        - mémoire : 324 Mo
-        - connexion internet
+\chapter{Matériels et Méthodes}
+    \section{Matériels}
+    le matériel utilisé dans le stage\footnote{par deux développeurs} est un PC DELL GX150~:
+    \begin{description}
+    \item[processeur] intel celeron\footnote{l'utilisation de Python s'est averée juditieuse, car avec Java la machine n'aurait peut être pas supporté la charge} 800Mhz~;
+     \item[mémoire]~: 324 Mo~;
+     \item[connexion internet]~: connexion internet haut débit.
+    \end{description}
 
-    logiciels
-        - système d'exploitation : Linux Fedora Core 4
-        - langage de programmation : Python 2.4
-        - subversion
-        - trac 0.8
-        - SGBDR : Postgresql 7.4, Oracle 8
-        - serveur http : Apache 2
-        - moteur de template ClearSilver
+     \section{logiciels}
+     les outils utilisés dans ce stage sont les suivants~:
+     \begin{description}
+     \item[système d'exploitation]~: Linux Fedora Core 4~
+     \item[serveur http]~: Apache~2~;
 
-    méthodes
-     	- eXtrem Programming
-        - travail collaboratif ( subversion et trac )
-        - programmation par objet ( python )
-        - web et cgi
+\item[postgresql]
+postgresql est un système de base de données relationnel, performent et open source. Le support des clés étrangères, les jointures, les vues, les déclancheurs (triggers en anglais) et les procédures, a fait de ce \textsc{sgbd} un des plus réputés.
+
+Le principe de l'héritage dans postgresql n'est pas tout a fait au point (cf. documentation postgresql), M.~Maïzi a mis au point un moyen utilisant les triggers qui permet une utilisation plus sûre du mécanisme~:
+
+********************* Mettre l'UML du diagramme de l'implémentation **********************************
 
 
-- subversion
+\item[clearSilver]
+ClearSilver est un système de patron (en anglais: template) rapide, performent et independant de tout autre language. 
+Le système de patron est utilisée dans le modèle \textsc{mvc} permet de séparer le fond (ce qu'on veut présenter) de la forme (la manière dont on présente).
+Dans un 1\ier temps, on crée la template puis on remplis les cases par des informations extraites d'une base de donnée.
+-- SCHEMA §§§§§§- ----
+clearSilver est particulièrement intéressant car il fournit un module pour python. Le seul inconvéniant est qu'il est peu documenté.
+
+    \item[python]
+Python est un langage de programmation interprété, multi-paradigme, ce qui signifie qu'il autorise la programmation impérative structurée, orientée objet, et fonctionnelle. Il est doté d'un typage dynamique (ce qui ne l'empêche pas de disposer d'un typage fort), d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions. 
+Il permet aussi de développer des applications web.
+
+ L'utilisation de Python facilite le travail mais certaines contraintes ont apparu~:
+ Le polymorphisme n'est pas implémnté ce qui limite l'application de ce mécanisme dans notre développement.
+ 
+     \item[subversion]
 Subversion est un systéme de contrôle de version qui tend à remplacer le vieux CVS dans la communauté de l'open source.
 Plusieurs caractéristiques de subversion permettent de faciliter le travail collaboratif. Parmi celles-ci on peut citer le dépot 
 centralisé pour les fichiers d'un projet, la possibilité de travailler de façon conccurente sur les fichiers d'un dépôt donné.
 exemple d'utilisation :
-             ***************METTRE ICI LE SCHEMA : gcl-conflit.png*****************
+    
+         ***************METTRE ICI LE SCHEMA : gcl-conflit.png*****************
 
    1. dans le premier cas, Boule et Bill effectuent des changements sur le même fichier, mais dans des portions distinctes (en jaune). 
 Lorsque Bill effectue un commit, Subversion lui signale qu'il n'est pas à jour et lui refuse l'opération. 
@@ -37,44 +52,46 @@ Subversion modifie alors son fichier local pour lui donner les deux versions de 
 afin qu'il résolve le conflit manuellement (en rouge). 
 Une fois la résolution faite, Bill peut effectuer sont commit.
 
-
-- trac
-
-Trac est un logiciel écrit en python qui integre plusieurs outils pour le développement de projet collaboratif. Il est composé d'un wiki, d'un système de tickets et d'une interface pour subversion.
+     \item[trac]
+Trac est un wiki évolué orienté développement de projet collaboratifs et support technique. Il est écrit en python et integre un wiki, un système de tickets et une interface pour subversion.
+     \item[wiki]
 Un wiki est un site web dynamique qui permet d'organiser rapidement des informations. Chaque développeur qui possède un compte sur trac peut editer des pages directement dans la naviguateur.
-
-- eXtreme programming
- L'eXtreme programming (XP) est une méthode agile de gestion de projet informatique, dont l'objectif est de permettre de gérer des projets de manière simple et efficace. Cette méthode a été inventée par Kent Beck et Ward Cunningham.
-un de ses principes : le travail en binômes, être prêt à jeter le travail fait à n'importe quel moments deu développement,~etc.
-
-- Python
-Python est un langage de programmation interprété, multi-paradigme, ce qui signifie qu'il autorise la programmation impérative structurée, orientée objet, et fonctionnelle. Il est doté d'un typage dynamique (ce qui ne l'empêche pas de disposer d'un typage fort), d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions. 
-Il permet aussi de développer des applications web.
-
-- ClearSilver
-ClearSilver est un système de patron (en anglais: template) rapide, performent et independant de tout autre language. 
-Le système de patron est utilisée dans le modèle \bsc{mvc} permet de séparer le fond (ce qu'on veut présenter) de la forme (la manière dont on présente).
-Dans un 1\up{èr} temps, on crée la template puis on remplis les cases par des informations extraites d'une base de donnée.
--- SCHEMA §§§§§§- ----
-ClearSilver est particulièrement intéressant car il fournit un module pour python.
-
-- Modèle Vue Contrôleur
-L'architecture Modèle Vue Contrôleur \dsc{mvc} est un motif de conception pour le développement d'applications logicielles qui sépare le modèle de données, l'interface utilisateur et la logique de contrôle.
+\end{description}
+      \section{méthodes}
+      \begin{description}
+         \item programmation par objet
+         \item web et cgi
+         \item[Modèle vue contrôleur]
+         l'architecture Modèle Vue Contrôleur \textsc{mvc} est un motif de conception pour le développement d'applications logicielles qui sépare le modèle de données, l'interface utilisateur et la logique de contrôle.
 Ce modèle d'architecture impose la séparation entre les données, les traitements et la présentation, ce qui donne trois parties fondamentales dans l'application finale : le modèle, la vue et le contrôleur.
 
+         \item[extreme programming]
+appelé aussi XP, est une méthode de développement de projet mise au point à la fin des années 90 par Kent Beck, Ward Cunningham et Ron Jeffries.
+XP doit son nom au fait qu'elle place l'activité de programmation au centre du projet, et qu'elle obtient ses résultats en combinant et en poussant à l'extrême certaines pratiques de développement.
+Affiliée aux méthodes dites agiles, elle est à ce jour sans aucun doute la plus connue d'entre elles. Les régles utilisées dans ce stage sont~:
 
-CRITIQUES :
-  L'utilisation de Python facilite le travail mais certaines contraintes~: 
-  \item Les variables et les méthodes privées d'une instance de classe restent accessibles depuis l'extérieur.
-  
-  class MaClasse : 
-     def __init__( self ) :
-         self.__var = ``hello world''
+\begin{description}
 
-  m =  MaClasse()
-  print m.__var
-  >>> hello world
+\item[la communication] est le moyen fondamental pour eviter les erreurs. Il est primordiale de communiquer entre développeurs et aussi avec le client qui demande l'application. Une présence du client (ou un représentant) sur le site de développement pendant toute la durée du projet est donc importante.
 
-  \item Le polymorphisme n'est pas implémnté ce qui limite l'application de ce mécanisme dans notre développement.
-  \item ClearSilver est peu utilisé et la documentation est peu abondante.
-  \item la méthode d'eXtreme programming est parfois source de conflits minimes dans les points de vue, elle est aussi 
+\item[le retour d'information] ou feedback est le meilleur moyen d'est d'être toujours en contact avec le client. Celà permet de fournir une application en adéquation totale avec sa demande. Il faut prévoir de sortir fréquement des versions de l'application pour la montrer au client et voir si ça lui convient.
+Une des spécificités originales de l'extreme programming est qu'il faut programmer les tests avant de commencer à coder l'application.
+Ces tests permettent de valider le bon fonctionnement de l'application et de toutes ses fonctionnalités. Cette règle évite au maximum d'avoir des erreurs lorsqu'une nouvelle fonctionnalitée (qui utilise les fonctionnalités précédement codées) est implementée.
+
+\item[la simplicite] la façon la plus simple d'arriver à un resultat est la meilleure. 
+    Ce principe est résumé par cette phrase~: "Vous n'en aurez pas besoin !".
+    La meilleure manière de rendre l'application évolutive est de la rendre aussi simple et bien conçue que possible 
+    (et donc simple à comprendre). La programmation par objet est particulièrement bien approprié à cette règle.
+\item[Travail en binome] La programmation se fait par deux. Le premier, appellé "pilote", a le clavier. C'est lui qui va travailler sur le code à écrire. Chaque développeur permutte, une fois "pilote", une fois "partenaire". Lorsque l'équipe est composé de plus de 2 personnes, les binomes changent fréquement, ce qui permet d'améliorer la connaissance collective de l'application et d'améliorer la communication entre les développeurs.
+\end{description}
+
+d'autres principes viennent s'ajouter~:
+\begin{itemize}
+\item ne pas ajouter de fonctionnalités plus tôt que prévu~;
+\item n'optimiser qu'à la toute fin~;
+\item etre toujours prêt à jeter son code.
+\end{itemize}
+
+Il faut souligne La méthode d'extreme programming peut être source de conflits minimes dans les points de vue.
+\end{description}
+
