@@ -1,17 +1,17 @@
 \chapter{Matériels et Méthodes}
     \section{Matériels}
-    le matériel utilisé dans le stage\footnote{par deux développeurs} est un PC DELL GX150~:
+    le matériel utilisé dans le stage\footnote{pour deux développeurs} est un PC DELL GX150~:
     \begin{description}
-    \item[processeur] intel celeron\footnote{l'utilisation de Python s'est averée juditieuse, car avec Java la machine n'aurait peut être pas supporté la charge} 800Mhz~;
-     \item[mémoire]~: 324 Mo~;
-     \item[connexion internet]~: connexion internet haut débit.
+    \item[processeur~:] intel celeron\footnote{l'utilisation de Python s'est averée juditieuse, car avec Java la machine n'aurait peut être pas supporté la charge} 800Mhz~;
+     \item[mémoire~:] 324 Mo~;
+     \item[connexion internet~:] connexion internet haut débit.
     \end{description}
 
      \section{logiciels}
      les outils utilisés dans ce stage sont les suivants~:
      \begin{description}
-     \item[système d'exploitation]~: Linux Fedora Core 4~
-     \item[serveur http]~: Apache~2~;
+     \item[système d'exploitation~:] Linux Fedora Core 4~
+     \item[serveur http~:] Apache~2~;
 
 \item[postgresql]
 postgresql est un système de base de données relationnel, performent et open source. Le support des clés étrangères, les jointures, les vues, les déclancheurs (triggers en anglais) et les procédures, a fait de ce \textsc{sgbd} un des plus réputés.
@@ -25,9 +25,68 @@ Le principe de l'héritage dans postgresql n'est pas tout a fait au point (cf. do
 ClearSilver est un système de patron (en anglais: template) rapide, performent et independant de tout autre language. 
 Le système de patron est utilisée dans le modèle \textsc{mvc} permet de séparer le fond (ce qu'on veut présenter) de la forme (la manière dont on présente).
 Dans un 1\ier temps, on crée la template puis on remplis les cases par des informations extraites d'une base de donnée.
+\begin{verbatim}
 -- SCHEMA §§§§§§- ----
-clearSilver est particulièrement intéressant car il fournit un module pour python. Le seul inconvéniant est qu'il est peu documenté.
 
+Fonctionnement sur un site internet :
+
+1 - Un acteur demande une page (un script cgi écrit en python en locurence).
+2 - Ce script crée une feuille de donnée (hdf) contenant diverses informations (récupéré dans une base de donnée).
+
+    Le remplissage de cette feuille se fait par l'intermédiaire du module neocgi de clearsilver.
+    
+        neocgi.hdf.setValue("le_nom_de_ma_variable", "valeur")
+        
+3 - Une fois que le traitement des données est effectué, le script ouvre une template et remplis les cases vides.
+
+        neocgi.display("le_nom_de_ma_template.cs")
+
+/*++++++++++++++++++++++++++++++++++++*/
+L'écriture d'une template :
+
+Clearsilver se veut simple et pratique. 
+
+Pour signaler à neocgi qu'une donnée est attendue, on écrit ceçi dans une template :
+
+    <?cs var:le_nom_de_ma_variable?>
+
+ClearSilver offre en plus :
+
+- des fonctions
+
+    * On peut définir des fonctions 
+    * Utiliser les quelques fonctions prédéfinis (min, max, ...)
+    
+- des boucles itératives, des tests de conditions.
+     
+/*++++++++++++++++++++++++++++++++++++*/
+L'arbre des données :
+
+En clearSilver, on organise les données dans un arbre.
+
+celà permet de :
+
+- Creer des boucles itératives sur tous les fils d'un noeud.
+
+    Par exemple, si on veut afficher une liste de tous les étudiants d'une mention :
+    
+    * On les stocke dans la feuille de donnée comme ceçi :
+    
+        neocgi.hdf.setValue("etudiant.0.nom", "gates")
+        neocgi.hdf.setValue("etudiant.0.prenom", "bill")
+        neocgi.hdf.setValue("etudiant.1.nom", "torvald")
+        neocgi.hdf.setValue("etudiant.1.prenom", "linus")
+        
+    * Dans la template, on créer une boucle qui itére sur tous les fils du noeud "étudiant" :
+    
+        <?cs each:item = etudiant ?>
+            Nom : <?cs var:item.nom ?>, Prénom : <?cs var:item.prenom ?><br/>
+        <?cs /each ?>
+
+/*++++++++++++++++++++++++++++++++++++*/
+
+Le seul inconvéniant est qu'il est peu documenté.
+\end{verbatim}
     \item[python]
 Python est un langage de programmation interprété, multi-paradigme, ce qui signifie qu'il autorise la programmation impérative structurée, orientée objet, et fonctionnelle. Il est doté d'un typage dynamique (ce qui ne l'empêche pas de disposer d'un typage fort), d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions. 
 Il permet aussi de développer des applications web.
@@ -54,18 +113,26 @@ Une fois la résolution faite, Bill peut effectuer sont commit.
 
      \item[trac]
 Trac est un wiki évolué orienté développement de projet collaboratifs et support technique. Il est écrit en python et integre un wiki, un système de tickets et une interface pour subversion.
+Le système de ticket permet :
+    - d'indiquer un bug.
+    - de proposer une amélioration.
+    - d'affecter des taches à un développeur.    
+Le planning permet de se fixer des objectifs pour une date donnée. On ajoute des tickets à une étape à franchir (milestone) et ils doiventêtre fermés avant de sortir une version "au public".
+Trac est un outil qui devient vite indispensable. 
+
      \item[wiki]
 Un wiki est un site web dynamique qui permet d'organiser rapidement des informations. Chaque développeur qui possède un compte sur trac peut editer des pages directement dans la naviguateur.
 \end{description}
-      \section{méthodes}
-      \begin{description}
-         \item programmation par objet
-         \item web et cgi
-         \item[Modèle vue contrôleur]
-         l'architecture Modèle Vue Contrôleur \textsc{mvc} est un motif de conception pour le développement d'applications logicielles qui sépare le modèle de données, l'interface utilisateur et la logique de contrôle.
+
+\section{méthodes}
+\begin{description}
+\item programmation par objet
+\item web et cgi
+\item[Modèle vue contrôleur]
+  l'architecture Modèle Vue Contrôleur \textsc{mvc} est un motif de conception pour le développement d'applications logicielles qui sépare le modèle de données, l'interface utilisateur et la logique de contrôle.
 Ce modèle d'architecture impose la séparation entre les données, les traitements et la présentation, ce qui donne trois parties fondamentales dans l'application finale : le modèle, la vue et le contrôleur.
 
-         \item[extreme programming]
+\item[extreme programming]
 appelé aussi XP, est une méthode de développement de projet mise au point à la fin des années 90 par Kent Beck, Ward Cunningham et Ron Jeffries.
 XP doit son nom au fait qu'elle place l'activité de programmation au centre du projet, et qu'elle obtient ses résultats en combinant et en poussant à l'extrême certaines pratiques de développement.
 Affiliée aux méthodes dites agiles, elle est à ce jour sans aucun doute la plus connue d'entre elles. Les régles utilisées dans ce stage sont~:
@@ -82,7 +149,9 @@ Ces tests permettent de valider le bon fonctionnement de l'application et de tou
     Ce principe est résumé par cette phrase~: "Vous n'en aurez pas besoin !".
     La meilleure manière de rendre l'application évolutive est de la rendre aussi simple et bien conçue que possible 
     (et donc simple à comprendre). La programmation par objet est particulièrement bien approprié à cette règle.
+
 \item[Travail en binome] La programmation se fait par deux. Le premier, appellé "pilote", a le clavier. C'est lui qui va travailler sur le code à écrire. Chaque développeur permutte, une fois "pilote", une fois "partenaire". Lorsque l'équipe est composé de plus de 2 personnes, les binomes changent fréquement, ce qui permet d'améliorer la connaissance collective de l'application et d'améliorer la communication entre les développeurs.
+
 \end{description}
 
 d'autres principes viennent s'ajouter~:

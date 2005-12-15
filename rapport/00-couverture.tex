@@ -21,6 +21,7 @@ du 1\up{èr}~septembre au 30~décembre \\ par~: \\ 2A \\ Directeur de stage : M.~J
 
 %pour enlever la date de la page de couverture
 \date{}
+\author{}
 %\setpapersize{A4}
 \setmarginsrb{3.5cm}{1.5cm}{2.5cm}{1.5cm}{1cm}{1cm}{1cm}{1cm}
 %1 est la marge gauche
@@ -34,17 +35,20 @@ du 1\up{èr}~septembre au 30~décembre \\ par~: \\ 2A \\ Directeur de stage : M.~J
 
 \begin{document}
   \maketitle
+  
   \onehalfspacing
-   \tableofcontents
-   
-    \pagestyle{fancy}
-    \lhead{adbapi et les briques de bases}
-    \rhead{\leftmark}
-    \renewcommand{\headrulewidth}{0.4pt}
-    \renewcommand{\footrulewidth}{0.4pt}  	
+  
+  \pagestyle{fancy}
+  \lhead{adbapi et les briques de bases}
+  \rhead{\leftmark}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0.4pt}  	
+  
 
-    \input{01-remerciements}    
-    \input{03-introduction}
-    \input{04-materielsETmethodes}
-
+  \input{01-remerciements}
+  \input{02-sommaire}
+  \input{03-introduction}
+  %\input{03-1-etat-de-lart}
+  \input{04-materielsETmethodes}
+  
 \end{document}

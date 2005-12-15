@@ -1,21 +1,68 @@
 3.adbapi
-adbapi est une application écrite en Python et offre une interface permettant d'exécuter des requêtes SQL simples. 
-Elle essaye de simplifier la tache des programmeurs en leur évitant l'écriture de code SQL tout en favorisant la clarté des applications écrites.
-aDBapi offre à ses utilisateurs les méthodes SQL suivantes : INSERT, SELECT, UPDATE et DELETE ainsi que d'autres fonctionnalités détaillés plus bas.
+Le but de cette application est de fournir une interface simple et homogène pour travailler avec différentes base de donnée tout en évitant de taper du SQL. Pour ce genre d'application, on parle d'API (il ne fournit pas un programme pour les utilisateurs finaux mais pour d'autres développeurs). \\
+adbapi favorise la clarté des applications écrites et offre à ses utilisateurs un einterface composée des méthodes SQL suivantes : INSERT(), SELECT(), UPDATE() et DELETE() ainsi que d'autres fonctionnalités détaillés plus bas.
+
+Un 1er prototype a été écrit par M.~Joël Maïzi. Ca été notre point de départ. Nous l'avons étudier puis améliorer en intégrant le concept de programmation objet.
+
+3.1 L'arbre de représentation
+
+L'intéraction avec la base de donnée se fait via un arbre.
+
+<<Schéma adbapi_tree.png>>
+
+A la racine, nous trouvons l'objet représentant la base de donnée.
+Sur cet objet, nous pouvons exécuter des commit (une méthode qui enregistre les modifications dans la base de donnée).
+
+Au second niveau, nous y trouvons tous les schémas de la base de donnée.
+
+Au troisième niveau, Les tables qui se trouvent dans ces schémas.
+    Sur ces tables, nous pouvons faire des SELECT, INSERT, DELETE, UPDATE
+    
+Au feuille, les champs contenus dans les tables.
+
+    Nous pouvons affecter des valeurs aux champs.
+
+On accéde au élement en parcourant cet arbre. 
+
 
     adbapi v0.1
-comme toute première version, aDBapi décelait quelques inconvénients (et non pas des bugs) :
-    - le non respect de certains principes de la programmation orienté objet (utilisation de variable globale, décapsulation des attributs des classe ....etc)
-    - la méthode aDBapiTable.DELETE permettait de supprimer tous les tuples d'une table ce qui la rend dangereuse.
+comme toute première version, adbapi décelait quelques inconvénients (et non pas des bugs) :
+    - le non respect de certains principes de la programmation orienté objet~: utilisation de variable globale, décapsulation des attributs des classe~etc.
+    - la méthode adbapiTable.DELETE permettait de supprimer tous les tuples d'une table ce qui la rend dangereuse.
     - lors d'un commit, le développeur été incapable de savoir si une transaction s'est bien déroulées ou non.
     - la structure de l'application ne permettait pas l'utilisation de différents modules pour communiquer avec les différents SGBDR
         
     adbapi v0.2
 elle essaye de résoudre les différents problèmes de la précédente version. Le plus important changement concerne la structure de l'application. la figure suivante schématise la nouvelle structure : 
 
-************* ICI METTRE L'UML ******************************** avec des notes explicatives *****************************
+************* ICI METTRE L'UML ************************ avec des notes explicatives ***************
 
+ Les modules)
+
+Adbapi a été programmé de façon modulaire. Il est possible de lui ajouter des modules pour gerer d'autres bases de donnée.
+Nous avons développé 2 modules (Oracle et postgres).
+
+L'ajout d'un module :
+
+- Il faut hériter de la classe AdbapiDB puis surcharger les méthodes suivantes :
+
+    - connectDb()
     
+        C'est la méthode qui instancie la connexion avec la base de donnée.
+        
+    - buildTreeDb()
+    
+        C'est la méthode qui crée l'arbre représentant la base de donnée.
+    
+Ces modules spécifiques à adbapi utilisent d'autres modules de base de donnée de plus bas niveau (interaction en SQL).
+
+Les modules de base de donnée de plus bas niveau doivent être compatible db api2.0 pour fonctionner avec adbapi. C'est à dire :
+
+- Fournir un "cursor". C'est un objet qui permet d'executer des requetes et de retourner les resultats.
+- Fournir la méthode fetchall() (dans l'objet cursor) qui retourne sous forme d'un table de tuple le resultat d'une requete SELECT
+- Fournir la méthode commit() qui sauvegarde les modifications dans la base de donnée (les requetes INSERT, UPDATE, DELETE n'interagisse 
+uniquement avec une représentation de la base de donnée situé dans la mémoire physique (RAM))
+
     adbapi v0.3
 le besoin de s'éloigner le plus possible du langage SQL tout en écrivant des requêtes correctes n'a pas été tout à fait atteint. 
 En effet, prenant l'exemple de cette requête : [afficher le nom des personnes ayant plus de 15 ans et moins de 36 ans]; Le programmeur est incapable d'exécuter celle-ci puisque adbapi n'offre pas le moyen d'exprimer des inégalités entre les valeurs.
@@ -23,10 +70,49 @@ Pour combler ce vide, M. Maïzi a réécrit la classe adbapiField en lui ajoutant l
 Le principe est d'utiliser une algèbre qui permet de spécifier les contraintes sur les attributs. exemple :
 
 
-5. adbapi le retour :
+
+adbapi le retour :
     une fois la première proposition des roles mise en place, nous avons continuer le développement 
 d'adbapi :
     * implémentation de l'algébre :
+
+Il nous fallait un système assez complet pour filtrer les résultats d'une requete (par exemple, récupèrer un seul tuple de la table étudiant).
+
+    SELECT * FROM table WHERE (a!=0 AND b='une requete') OR NOT c>4;
+    
+Quand nous examinons une requete 'simple' en SQL (en particulier la partie après le WHERE), nous voyons :
+
+<<SCHEMA analyse-requete.png>>
+
+- Des éléments (a=0, b='une requete', c>4) où l'on compare la valeur d'un champ à une valeur "statique" (écrite dans la requête) ou celle d'un autre champ.
+  Les opérateurs les plus utilisés sont : '=', '<', '>', '!='
+- Des opérateurs AND, OR, NOT qui fournit des conditions supplémentaires sur le ou les tuples à selectionner.
+  Il y a aussi des parenthèses pour définir la priorité des opérations. On y voit une analogie avec l'algèbre de Boole.
+
+Pour résoudre notre problème, le moyen le plus simple est de créer une algèbre en surchargeant les opérateurs dans python 
+et d'ajouter des méthodes à nos adbapiField pour construire les éléments de notre filtre. La mise en place d'une 
+algèbre permettra de construire aisement des requètes complexes.
+
+
+On a donc :
+
+- Rajouter 2 variables permettant de stocker les filtres SQL générés :
+    - Une variable qui contient le filtre de l'adbapiField construit grace aux méthodes setOp() et set().
+    - et un autre variable qui contient le filtre généré par l'algèbre.
+- Surcharger les opérateurs +, - (unaire), et *
+
+Voiçi les règles de cette algèbre (a et b étant des adbapiField) :
+
+    Algèbre Adbapi      SQL
+    
+        a*b             a AND b
+        a+b             a OR b
+        a+(-b)          a OR NOT b
+
+L'avantage de cette algèbre est qu'on peut utiliser les priorités des parenthèses pour construire un filtre 
+assez complexe tout comme dans une requete SQL :
+
+        a+((-b)*c)      a OR (NOT b AND c)
     
     * implémentation des schémas :
     les schémas dans une base de données forment un moyen d'encapsulation de plusieurs tables dans une même entité logique. Face a une prochaine intégration des schémas dans la construction des futurs bases de données, nous sommes contraint de faire en sorte q'adbapi pressne en charge ces schémas.
@@ -36,34 +122,37 @@ d'adbapi :
 
     * implémentation du mécanisme de jointure :
     adbapi ne permettait pas de faire une séléction impliquant plusieurs tables. ce problème oblige à créer une vue au niveau de la base de données. Cette vue sert à mettre en relation les tables souhaitées. Après, et seulement après cette manoeuvre, qu'on peut récupérer le résultat voulu en effectuant la séléction sur la vue générée.
-Le but fixé été de pouvoir éxécuter des instructions de ce type :
-<code>
-    acteur.id.setVal( 2 )
-    resultat = acces_voiture.getRel( acteur )
-</code>
-en ayant ce diagramme UML :
 
-****************************************** ICI UML ***************************************************
+<<SCHEMAS getrel_schema1.png>>
 
-explication : 
-acteur.id.setVal( 2 ) : initialisation de l'identifiant d'un acteur à 2
-resultat = acces_voiture.getRel( acteur ) : en passant l'objet acteur à la méthode getRel() on veut récupérer la liste des roles ainsi que des voitures qui entrent en relation avec l'acteur dont l'identifiant est 2.
-voici un schéma illustrant la situation précédente :
-
-****************************************  ICI METTRE lE SCHEMA ILLUSTRANT ***************************************
 
 Solution choisie : 
 toute solution devait se baser sur les clés étrangères déjà implémentées dans les SGBDR. en effet les 
 clés étrangères est le mécanisme qui permet de lier les tables entres elles. 
-Donc la première étape été d'identifier les attributs des tables constituant des clés étrangères puis de stocker dans chacun de ces attributs le nom de la table et 
-de l'attribut pointé. 
-La deuxième étape consiste à stocker chaque objet adbapiTable le nom des différentes tables pointées ainsi 
+Donc la première étape été d'identifier les attributs des tables constituant des clés étrangères puis de stocker dans chacun de ces attributs le nom de la table et de l'attribut pointé. 
+La deuxième étape consiste à stocker dans chaque objet adbapiTable le nom des différentes tables pointées ainsi 
 que les noms des attributs constituants la clé étrangère. Cette étape est optionnelle mais son résultat permet de 
 faciliter certains traitements ultérieurs. 
 Puisque chaque clé étrangère correspond à une clé primaire dans une autre relation, la troisième étape consiste à stocker le noms des champs de la clé primaire dans chaque objet adbapiTable.
-On peut voir le résultat à cette page #page
 
-    * Problème : le type de données manipulées
+Nous avons alors ajouter une méthode dans notre classe AdbapiTable appellé 'getRel()' qui répond à utilise les points cités ci-dessus.
+Ce qui donne ceçi dans un programme qui utilise cette méthode :
+<code>
+table_relation = adbapi.public.r_etudiant_module()
+
+# on selectionne un tuple dans la table
+table_relation.id_etudiant.setVal(1)
+table_relation.id_mention.setVal(356)
+table_relation.annee.setVal(2005)
+table_relation.semestre.setVal(1)
+
+# on récupére une liste des tables en relation
+res = table_relation.getRel()
+print res.etudiant.nom.getVal() # affiche 'Klurch'
+</code>
+
+
+    * le type de données manipulées
 Pour rappel, un des principaux buts pour lesquels adbapi a été réalisée, est de permettre au programmeur une 
 manipulation aisées des différentes informations extraites d'une base de données. Cette manipulation se matérialise pas l'utilisation des types python de base. 
 De plus, le programmeur n'a pas besoin de savoir le type de données dans une base de données, car ce dernier peut avoir 
@@ -88,6 +177,8 @@ inconvéniant majeur qui est la multitude d'objet en mémoire
 	- la deuxième solution qui est plus raisonnable consiste à créer une classe AdbapiTypes qui sera associée au 
 SGBDR utilisé et qui contiendra les méthodes nécessaire pour la conversion dans le sens voulu. C'est cette solution qui 
 a été retenue vu la différence du nombre d'objets crées et le coût que ça engendrerait.
+<<schema UML>>
+Pour chaque module adbapi pour une base de donnée, nous définissons en plus une classe dérivant d'adbapiType se chargeant de la conversion des types. Cette classe contient des méthodes pour convertir dans les 2 sens. Elle s'occupe donc de convertir les données renvoyées par le module de base de donnée bas niveau et les données envoyés par l'utilisateur.
 
 AdbapiOracle :
 	Le service informatique utilise aussi un SGBDR de type Oracle. Cette utilisation et le besoin urgent de pouvoir 
@@ -98,29 +189,12 @@ un module AdbapiOracle qui au même titre que AdbapiPg va se charger de construir
 propriétaire "OWNER" ou l'identifiant de l'utilisateur qui se connecte "USER". les vues quant à elles forment des 
 objets à part entière car elles ne sont attachées à aucun "TABLESPACE" mais plutôt au propriétaire "OWNER".
 
-6. Les Droits :
-les droits qu'un acteur a sur une donnée sont stockées aux niveau de la base de donnée. Certes c'est une solution mais 
-elle montre des défauts :
-    * on ne peut pas donner des droits sur un ensemble d'attributs mais plutôt sur tout les attributs d'une donnée 
-(tuple) .
-    * de plus il est difficile de mettre en place un systeme qui permet de définir en cascade les droits sur plusieurs 
-données, ex. : un résponsable de spécialité doit avoir le droit d'effectuer certaines opérations sur sa spécialité et 
-de consulter les candidatures pour les approuver; Donc changer l'état d'une candidaure donc éditer une candidature.
-Tous ceci parsequ'il a le rôle de résponsable de spécialité.
-Le modèle actuel ne permet pas de répondre à ces problèmes ce qui nous obligent à jeter tous ce que nous avons fait 
-jusqu'à présent (principe de l'eXtrem Programming oblige) et de faire une autre proposition.
 
-6.1. Les patrons s'en chargent !
-L'idée est la suivante : lors de la présentation d'une donnée à un acteur du système d'information, on utilisera un patron qui n'affiche que les champs 
-susceptibles d'être consulter ou modifier et ceci selon les droits que l'acteur a par rapport à la donnée.
+3.6 Utilisation
+Voiçi les étapes communes à toutes applications utilisant adbapi :
 
-6.2. Rôles en cascade
-Le but est d'associer à un rôles principale un ou plusieurs autres rôles dis annexes. Par conséquent un acteur 
-ayant un rôle principale sur une donnée se voit attribuer des rôles annexes. Mais il ne faut pas oublier de spécifier 
-que le rôle annexe (dans notre cas : le résponsable de condidatures) est posé sur tous les tuples d'une même 
-table (la table contenant les candidatures à la spécialité). Donc un role annexe doit avoir un attribut qui spécifie 
-la table sur laquelle s'applique ce role.
-
-**********METTRE ICI LE SCHEMA UML**************
-
-6.3 
+1) Etablir une connexion avec la base de donnée en instanciant le bon module (voir le chapitre suivant).
+2) Obtenir une copie d'une table
+    
+    pour eviter de travailler directement avec les tables de l'arbre de représentation de la base de donnée, il faut 
+    instancier un nouvel adbapiTable (qui est une copie d'un adbapiTable de l'arbre).

@@ -1,21 +1,28 @@
-\chapter{Systeme d'information}
-le service informatique de l'\textsc{ufr} propose souvent de nouveaux services au core enseignant ainsi qu'aux étudiants; 
-Ceci implique la création de nouvelles applications (web entre autre). Une application web est couplée, dans la plupart du temps, à une base de données. 
-Afin de donner plus de liberté aux enseignants dans la manipulation des données qui les intéressent, Une approche a vu le jour : on peut considérer un system d'information comme étant un ensemble de donnée sur lesquelles des acteurs ont des droits selon leur(s) rôle(s). cette approche étant générique on peut l'appliquer donc sur n'importe quelles données.
+\chapter{Système d'information}
 
 M.~Maïzi a schématisée cette approche dans un premier temps comme suit~:
 
 ******************************** ICI L'ANCIEN UML **************************************************
 
-********************** ICI LES INCONVÉNIENTS *******************************************************
+On peut relever les inconvéniants suivants :
+\item On pratique on créera autant de relations qu'il y a de rôle exemple : role_responsable_groupe, 
+role_adjoint_responsable_groupe, role_participant_groupe.... etc
+\item Si un jour, un nouveau role apparaît, on est obligé de créer la nouvelle relation correspondante dans la base ainsi
+que dans le diagramme
+\item le manque de contrainte d'unicité peut causer des redondances dans les relations role_X_Y, exemple : dans la relation role_responsable_groupe : la même personne peut avoir différents droits sur le même groupe!!!
+\item Si une personne à plusieurs roles sur le même groupe (je suppose des cas ou c'est vrai) alors comment faire pour savoir quel role(droits) utiliser pour permettre à cette personne d'efféctuer des actions?
+  En fait on va devoir parcourir toute les relations role_X_Y et récolter les roles correspondants à cette
+ personnes ==> lourd à mon avis 
 
-d'où la proposition de cette alternative~: 
+d'où la proposition de cette alternative~:
+
 **************************** ICI LE NOUVEAU UML *********************************************
 
 
-Première brique :
-pour chaque table visité on veut présenter au visiteur les différents tuples de la table ainsi que les opérations que le visiteur peut effectuer sur chacun des tuples
-6. Les Droits :
+\item Pour chaque table visité on veut présenter au visiteur les différents tuples de la table ainsi que les opérations que le visiteur peut effectuer sur chacun des tuples
+
+6. Droits et le système d'information:
+
 les droits qu'un acteur a sur une donnée sont stockées aux niveau de la base de donnée. Certes c'est une solution mais 
 elle montre des défauts :
     * on ne peut pas donner des droits sur un ensemble d'attributs mais plutôt sur tout les attributs d'une donnée 
@@ -38,6 +45,6 @@ que le rôle annexe (dans notre cas : le résponsable de condidatures) est posé su
 table (la table contenant les candidatures à la spécialité). Donc un role annexe doit avoir un attribut qui spécifie 
 la table sur laquelle s'applique ce role.
 
-**********METTRE ICI LE SCHEMA UML**************
+**********METTRE ICI LE NOUVEAU SCHEMA UML**************
 
 6.3 
